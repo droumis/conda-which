@@ -1,6 +1,6 @@
 package:
-  name: multiply
-  version: 1.0
+  name: conda-which
+  version: 0.1
 
 source:
   path: ../
@@ -15,9 +15,8 @@ requirements:
   run:
     - conda
     - python >=3.7
-    - maturin
 
 about:
-  home: https://github.com/conda/conda-plugin-template
+  home: https://github.com/droumis/conda-which
   license: BSD-3-Clause
-  summary: A subcommand written in Rust that multiplies two integers
+  summary: "Which environments have <package> installed?"

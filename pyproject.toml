@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ascii-graph"
-version = "1.0"
-description = "My ascii graph subcommand plugin"
+name = "conda-which"
+version = "0.1"
+description = "Which environments have <package> installed?"
 requires-python = ">=3.7"
-dependencies = ["conda", "sympy"]
+dependencies = ["conda"]
 
 [project.entry-points.conda]
-ascii-graph = "ascii_graph"
+which = "conda_which"
 
 [tool.setuptools]
-py-modules = ["ascii_graph"]
+py-modules = ["conda_which"]
