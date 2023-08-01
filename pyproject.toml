@@ -7,7 +7,7 @@ name = "conda-which"
 version = "0.1"
 description = "Which environments have <package> installed?"
 requires-python = ">=3.7"
-dependencies = ["conda"]
+dependencies = ["conda", "prettytable"]
 
 [project.entry-points.conda]
 which = "conda_which"

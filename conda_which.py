@@ -17,7 +17,7 @@ def parse_conda_list_output(data):
 def conda_which(argv: list):
     parser = argparse.ArgumentParser("conda which")
     parser.add_argument("package", type=str, help="Name of the package")
-    parser.add_argument("--timeout", type=int, default=10, help="Timeout for each environment check (in seconds). Pass 'False' to disable timeout.")
+    parser.add_argument("--timeout", type=int, default=None, help="Timeout for each environment check in seconds (default is no timeout)")
     args = parser.parse_args(argv)
 
     completed_process = subprocess.run(["conda", "env", "list", "--json"], capture_output=True, text=True)
@@ -27,25 +27,22 @@ def conda_which(argv: list):
     conda_root_path = Path(os.environ.get('CONDA_PREFIX')).parent.parent
 
     installed_envs = []
-    for env in environments[:5]:
+    for env in environments:
         if str(env) == str(conda_root_path):
             print(f"Checking: {env} (base)")
         else:
             print(f"Checking: {env}")
         try:
-            if args.timeout == 'False':
-                result = subprocess.run(['conda', 'list', '--prefix', env, '--json'], capture_output=True, text=True)
-            else:
-                result = subprocess.run(['conda', 'list', '--prefix', env, '--json'], capture_output=True, text=True, timeout=args.timeout)
+            result = subprocess.run(['conda', 'list', '--prefix', env, '--json'], capture_output=True, text=True, timeout=args.timeout)
             data = json.loads(result.stdout)
             packages = {pkg['name']: pkg['version'] for pkg in data}
             if args.package in packages:
                 installed_envs.append(env)
         except subprocess.TimeoutExpired:
             print(f"Skipping environment {env} due to timeout")
-
-    if installed_envs:
-        print("========================")
+    
+    print("========================")
+    if installed_envs:    
         print(f"The package '{args.package}' is installed in the following environments:")
         table = PrettyTable()
         table.field_names = ["Environment Name", "Environment Path"]
